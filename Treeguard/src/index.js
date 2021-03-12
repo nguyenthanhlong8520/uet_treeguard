@@ -4,6 +4,26 @@ var bodyParser = require('body-parser');
 const pageRouter = require('./routes.js');
 const app = express();
 
+const server = require('http').createServer(app);
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ server:server });
+
+wss.on('connection', function connection(ws) {
+    console.log('A new client Connected!');
+    ws.send('Welcome New Client!');
+  
+    ws.on('message', function incoming(message) {
+      console.log('received: %s', message);
+  
+      wss.clients.forEach(function each(client) {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+      
+    });
+});
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -16,7 +36,6 @@ app.use(express.urlencoded( { extended : false}));
 // Serve static files. CSS, Images, JS files ... etc
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-
 
 // Routers
 app.use('/', pageRouter);
@@ -35,7 +54,7 @@ app.use((err, req, res, next) => {
 });
 
 // Setting up the server
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log('Server is running on port 3000...');
 });
 
