@@ -14,9 +14,12 @@ Devices_mess.prototype = {
         let sql = `INSERT INTO device_messages(device_id, is_stroked, is_removed, is_fire, power) VALUES (?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
-            if(err) throw err;
+            if(err) {
+                throw err;
+                //callback(false);
+            }
             // return the last inserted id. if there is no error
-            callback(result.insertId);
+            callback(true);
         });
     },
 }

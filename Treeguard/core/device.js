@@ -14,9 +14,12 @@ Devices.prototype = {
         let sql = `INSERT INTO devices(forest_id, device_name, latitude, longtitude, registed_by, maintenence) VALUES (?, ?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
-            if(err) throw err;
+            if(err) {
+                throw err;
+                //callback(false);
+            }
             // return the last inserted id. if there is no error
-            callback(result.insertId);
+            callback(true);
         });
     },
 }

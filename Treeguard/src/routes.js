@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../database/index.js')
 
 const User = require('../core/user');
+const User_infor = require('../core/user_infor');
 const Forest = require('../core/forest')
 const Devices = require('../core/device')
 const Devices_mess = require('../core/device_messages')
@@ -11,16 +12,10 @@ const user = new User();
 const forest = new Forest();
 const device = new Devices();
 const device_mess = new Devices_mess();
+const user_infor = new User_infor();
 
 router.get('/', (req, res, next) => {
   return res.send('Hello World!!!')
-})
-
-router.get('/forest', (req, res, next) => {
-    pool.query(`SELECT * from forest`, function (err, result) {
-        if (err) throw err;
-        return res.json(result);
-    });
 })
 
 // Post login data
@@ -34,13 +29,12 @@ router.post('/login', (req, res, next) => {
     })
 });
 
-// Post register data
+//Post register data
 router.post('/register', (req, res, next) => {
     // prepare an object containing all user inputs.
     let userInput = {
         username: req.body.username,
         password: req.body.password,
-        forest_id: req.body.forest_id
     };
 
     if (req.body.password == req.body.confirmPassword) {
@@ -59,6 +53,38 @@ router.post('/register', (req, res, next) => {
     }
 });
 
+//Create user infor
+router.post('/user_infor_create', (req, res, next) => {
+    // prepare an object containing all user inputs.
+    let user_inforInput = {
+        id: req.body.id,
+        last_name: req.body.last_name,
+        first_name: req.body.first_name,
+        authority: req.body.authority,
+        email: req.body.email,
+        phone: req.body.phone,
+        forest_id: req.body.forest_id,
+    }
+    user_infor.create(user_inforInput, function (callback) {
+        if (callback) {
+                res.send('Create account success');
+        }
+        else {
+                res.send('Error creating a new user ...');
+        }
+    });
+  
+});
+
+// query data all forest
+router.get('/forest', (req, res, next) => {
+    pool.query(`SELECT * from forest`, function (err, result) {
+        if (err) throw err;
+        return res.json(result);
+    });
+})
+
+// create forest
 router.post('/forest', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
@@ -75,11 +101,9 @@ router.post('/forest', (req, res, next) => {
         size: req.body.size
     };
 
-    forest.create(data, function (lastId) {
-        if (lastId) {
-            user.find(lastId, function (result) {
+    forest.create(data, function (callback) {
+        if (callback) {
                 res.send('Sucessfully to add forest');
-            });
         }
         else {
             res.send('Error creating forest ...');
@@ -88,6 +112,7 @@ router.post('/forest', (req, res, next) => {
 
 });
 
+// create device
 router.post('/devices', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
@@ -99,11 +124,9 @@ router.post('/devices', (req, res, next) => {
         maintenence: req.body.maintenence,
     };
 
-    device.create(data, function (lastId) {
-        if (lastId) {
-            user.find(lastId, function (result) {
-                res.send('Sucessfully to add device');
-            });
+    device.create(data, function (callback) {
+        if (callback) {
+            res.send('Sucessfully to add device'); 
         }
         else {
             res.send('Error creating device ...');
@@ -112,6 +135,7 @@ router.post('/devices', (req, res, next) => {
 
 });
 
+// create devices_mess
 router.post('/devices_mess', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
@@ -122,11 +146,9 @@ router.post('/devices_mess', (req, res, next) => {
         power: req.body.power,
     };
 
-    device_mess.create(data, function (lastId) {
-        if (lastId) {
-            user.find(lastId, function (result) {
-                res.send('Sucessfully to add device');
-            });
+    device_mess.create(data, function (callback) {
+        if (callback) {
+            res.send('Sucessfully to add device');
         }
         else {
             res.send('Error creating device ...');

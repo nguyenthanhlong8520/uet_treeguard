@@ -15,9 +15,12 @@ forest.prototype = {
             latitude_BR, longtitude_BR, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
-            if(err) throw err;
+            if(err) {
+                throw err;
+                //callback(false);
+            }
             // return the last inserted id. if there is no error
-            callback(result.insertId);
+            callback(true);
         });
     },
 }
