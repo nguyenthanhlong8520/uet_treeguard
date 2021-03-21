@@ -35,7 +35,7 @@ User_infor.prototype = {
         }
 
         // prepare the sql query
-        let sql = `INSERT INTO user_infor(id, last_name, first_name, authority, email, phone, forest_id) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO user_infor(id, last_name, first_name,  email, phone) VALUES (?, ?, ?, ?, ?)`;
         // call the query give it the sql string and the values (bind array)
         pool.query(sql, bind, function(err, result) {
             if(err) {

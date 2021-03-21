@@ -11,8 +11,7 @@ forest.prototype = {
             bind.push(body[prop]);
         }
         // prepare the sql query
-        let sql = `INSERT INTO forest(name, district, town, province, latitude_BL, longtitude_BL, latitude_TL, longtitude_TL,
-            latitude_BR, longtitude_BR, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO forest(name, district, town, province, latitude, longtitude, size) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
             if(err) {

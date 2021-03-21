@@ -19,7 +19,7 @@ Devices.prototype = {
                 //callback(false);
             }
             // return the last inserted id. if there is no error
-            callback(true);
+            callback("Query successfully !!!");
         });
     },
 }
