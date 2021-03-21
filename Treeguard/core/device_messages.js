@@ -11,7 +11,7 @@ Devices_mess.prototype = {
             bind.push(body[prop]);
         }
         // prepare the sql query
-        let sql = `INSERT INTO device_messages(device_id, is_stroked, is_removed, is_fire, power) VALUES (?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO device_messages(id, is_stroked, is_removed, is_fire, power) VALUES (?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
             if(err) {

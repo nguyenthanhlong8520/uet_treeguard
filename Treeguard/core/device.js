@@ -11,7 +11,7 @@ Devices.prototype = {
             bind.push(body[prop]);
         }
         // prepare the sql query
-        let sql = `INSERT INTO devices(forest_id, device_name, latitude, longtitude, registed_by, maintenence) VALUES (?, ?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO devices(forest_id, device_name, latitude, longtitude, registed_by) VALUES (?, ?, ?, ?, ?)`;
 
         pool.query(sql, bind, function(err, result) {
             if(err) {

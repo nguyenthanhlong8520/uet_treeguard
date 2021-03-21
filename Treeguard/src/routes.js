@@ -19,7 +19,7 @@ router.get('/', (req, res, next) => {
 })
 
 // Post login data
-router.post('/login', (req, res, next) => {
+router.post('/api/login', (req, res, next) => {
     user.login(req.body.username, req.body.password, function (result) {
         if (result) {
             res.send('login success');
@@ -30,7 +30,7 @@ router.post('/login', (req, res, next) => {
 });
 
 //Post register data
-router.post('/register', (req, res, next) => {
+router.post('/api/register', (req, res, next) => {
     // prepare an object containing all user inputs.
     let userInput = {
         username: req.body.username,
@@ -54,10 +54,10 @@ router.post('/register', (req, res, next) => {
 });
 
 //Create user infor
-router.post('/user_infor_create', (req, res, next) => {
+router.post('/api/user/create_userInfor/:id_user', (req, res, next) => {
     // prepare an object containing all user inputs.
     let user_inforInput = {
-        id: req.body.id,
+        id: req.params.id_user,
         last_name: req.body.last_name,
         first_name: req.body.first_name,
         authority: req.body.authority,
@@ -76,16 +76,28 @@ router.post('/user_infor_create', (req, res, next) => {
   
 });
 
+
+// forest
+
 // query data all forest
-router.get('/forest', (req, res, next) => {
+router.get('/api/forest/all_forest', (req, res, next) => {
     pool.query(`SELECT * from forest`, function (err, result) {
         if (err) throw err;
         return res.json(result);
     });
 })
 
+// query data forest from id 
+router.get('/api/forest/:id_forest', (req, res, next) => {
+    pool.query(`SELECT * from forest where forest.id_Forest = ${req.params.id_forest}`, function (err, result) {
+        if (err) throw err;
+        return res.json(result);
+    });
+})
+
+
 // create forest
-router.post('/forest', (req, res, next) => {
+router.post('/api/forest/create_forest', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
         name: req.body.name,
@@ -113,7 +125,7 @@ router.post('/forest', (req, res, next) => {
 });
 
 // create device
-router.post('/devices', (req, res, next) => {
+router.post('/api/device/create_device', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
         forest_id: req.body.forest_id,
@@ -136,10 +148,10 @@ router.post('/devices', (req, res, next) => {
 });
 
 // create devices_mess
-router.post('/devices_mess', (req, res, next) => {
+router.post('/api/device_mess/create_devicesMess/:device_id', (req, res, next) => {
     // prepare an object containing all user inputs.
     let data = {
-        device_id: req.body.device_id,
+        device_id: req.params.device_id,
         is_stroked: req.body.is_stroked,
         is_removed: req.body.is_removed,
         is_fire: req.body.is_fire,
@@ -148,10 +160,10 @@ router.post('/devices_mess', (req, res, next) => {
 
     device_mess.create(data, function (callback) {
         if (callback) {
-            res.send('Sucessfully to add device');
+            res.send('Sucessfully to add mess_device');
         }
         else {
-            res.send('Error creating device ...');
+            res.send('Error creating mess_device ...');
         }
     });
 

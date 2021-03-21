@@ -1,0 +1,33 @@
+import websocket
+import json
+import serial
+from time import sleep
+
+while True:
+    try:
+        ser = serial.Serial ('/dev/ttyS0', 9600) 
+        ws = websocket.WebSocket()
+        ws.connect('ws://192.168.0.104:3000')
+        while True:
+            received_data = ser.read()              #read serial port
+            sleep(0.03)
+            data_left = ser.inWaiting()             #check for remaining byte
+            received_data += ser.read(data_left)
+            print(received_data)
+            received_data.decode(encoding='UTF-8',errors='strict')
+            a = str(received_data)
+            print(received_data)
+            a = a.replace('b','')
+            a = a.replace("'","")                                
+            test_json = {
+                "Device_id" : a[0],
+                "is_stroked" : a[1],
+                "is_fire" : a[2],
+                "power" : a[3],
+                "Method": 1
+            } 
+            ws.send(json.dumps(test_json))
+    except:
+        pass
+
+
